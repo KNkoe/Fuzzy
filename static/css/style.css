@@ -1,0 +1,11 @@
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #a8dadc;
+	font-family: "Courier New", Courier, monospace;
+  }
+
+nav{
+	height:60px;
+	background: #1d3557;
+}
