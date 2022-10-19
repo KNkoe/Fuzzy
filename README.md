@@ -1,4 +1,4 @@
-# Student_Management_system-FLASK
+# Student grades management system using fuzzy logic
 STUDENT MANAGEMENT WEBSITE USING FLASK
 
 Technology used:
