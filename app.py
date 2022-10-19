@@ -17,7 +17,7 @@ def home():
 			data=viewmoderator()
 			for lst in data:
 				if str(lst[0])==str(x) and str(lst[2])==str(y):
-					return render_template('moderator_section.html',mode=x)
+					return render_template('moderator.html',mode=x)
 
 			return render_template('index.html',status="error")
 	return render_template('index.html',status='get')
@@ -47,39 +47,15 @@ def moderator():
 
 	return render_template('add_moderator.html',msg="GET")
 
-
-@app.route('/addsubject',methods=["POST","GET"])
-def add_subject():
-	lst=viewdatastud()
-	if request.method=="POST":
-		usn=request.form['mod_del']
-		sub1=request.form['inputname']
-		sub2=request.form['num']
-		sub3=request.form['nu']
-		back=request.form['pe']
-		try:
-			addsubject(usn,sub1,sub2,sub3,back)
-			return render_template('/addsubject.html',status="ok",data=lst,lenght=len(lst))
-		except Exception as e:
-			return render_template('/addsubject.html',status="error",data=lst,lenght=len(lst))
-
-	return render_template('/addsubject.html',status="",data=lst,lenght=len(lst))
-
 @app.route('/add_student',methods=["POST","GET"])
 def add_student():
 	print(viewmoderator(),"\n\n\n\n\n\n\n")
 	if request.method=="POST":
-		usn=request.form['usnno']
+		usn=request.form['student_number']
 		name=request.form['inputname']
-
-		# paswd=request.form['exampleInputPassword1']
 		add=request.form['add']
 		mail=request.form['exampleInputEmail1']
 		phone=request.form['num']
-		if len(str(phone))!=10:
-			return render_template('add_student.html',status="Phone")
-
-		print(request.form)
 		add=request.form['add']
 		mail=request.form['exampleInputEmail1']
 		phone=request.form['num']
@@ -97,32 +73,25 @@ def add_student():
 			return render_template('add_student.html',status="error")
 
 	return render_template('add_student.html',status="")
-	
 
 
-@app.route('/addfeedetails',methods=["POST","GET"])
-def add_fee_details():
+
+@app.route('/addsubject',methods=["POST","GET"])
+def add_subject():
 	lst=viewdatastud()
-
 	if request.method=="POST":
-		usn=request.form['usnno']
-		ammt=int(request.form['inputname'])
-		sts=request.form['num']
-		date=request.form['add']
-		penalty=request.form['pe']
-
+		usn=request.form['mod_del']
+		sub1=request.form['inputname']
+		sub2=request.form['num']
+		sub3=request.form['nu']
+		back=request.form['pe']
 		try:
-			addfeedetails(usn,int(ammt),sts,str(date),penalty)
-			print(type(usn),type(ammt),type(sts),type(date),type(penalty))
-			return render_template('addfeedetails.html',status="success",data=lst,lenght=len(lst))
-
+			addsubject(usn,sub1,sub2,sub3,back)
+			return render_template('/addsubject.html',status="ok",data=lst,lenght=len(lst))
 		except Exception as e:
-			print(type(usn),type(ammt),type(sts),type(date),type(penalty))
-			print(e,"============================")
-			return render_template('addfeedetails.html',status="error",data=lst,lenght=len(lst))
+			return render_template('/addsubject.html',status="error",data=lst,lenght=len(lst))
 
-			
-	return render_template('addfeedetails.html',status="get",data=lst,lenght=len(lst))
+	return render_template('/addsubject.html',status="",data=lst,lenght=len(lst))
 
 
 @app.route('/update',methods=['GET','POST'])
@@ -142,12 +111,12 @@ def update():
 		print("testing2=========")
 	
 		updatemark(usn,int(iat1),int(iat2),int(iat3),int(ex),int(avg),int(total))
-		return render_template('addmarks.html',status='success',data=lst,lenght=len(lst))
+		return render_template('add_marks.html',status='success',data=lst,lenght=len(lst))
 		
 	except Exception as e:
 		print("Exception:",e)
 	else:
-		return render_template('addmarks.html',status="error",data=lst,lenght=len(lst))
+		return render_template('add_marks.html',status="error",data=lst,lenght=len(lst))
 		
 
 
@@ -156,7 +125,7 @@ def update():
 def addmarks():
 	lst=viewdatastud()
 	if request.method=="GET":
-		return render_template('addmarks.html',status="get",data=lst,lenght=len(lst))
+		return render_template('add_marks.html',status="get",data=lst,lenght=len(lst))
 
 	print("testing==========")
 	try:
@@ -173,17 +142,17 @@ def addmarks():
 		print("testing2=========")
 	
 		addmark(usn,int(iat1),int(iat2),int(iat3),int(ex),int(avg),int(total))
-		return render_template('addmarks.html',status='success',data=lst,lenght=len(lst))
+		return render_template('add_marks.html',status='success',data=lst,lenght=len(lst))
 		
 	except Exception as e:
 		print("Exception:",e)
 	else:
-		return render_template('addmarks.html',status="error",data=lst,lenght=len(lst))
+		return render_template('add_marks.html',status="error",data=lst,lenght=len(lst))
 		
 
 
 
-	# return render_template('addmarks.html',status="POST",data=lst,lenght=len(lst))
+	# return render_template('add_marks.html',status="POST",data=lst,lenght=len(lst))
 	
 
 
@@ -192,7 +161,7 @@ def modesection():
 	nam="Moderator"
 	if request.method=="POST":
 		nam=str(request.form['Uname'])
-	return render_template('moderator_section.html',mode=nam)
+	return render_template('moderator.html',mode=nam)
 
 
 
@@ -256,14 +225,6 @@ def view_fees():
 	lst=viewfeedetails()
 	return render_template('view_fees.html',data=lst,lenght=len(lst))
 
-
-# @app.route('/viewdata',methods=["POST","GET"])
-# def view():
-# 	return f"<h1>{viewmoderator()}</h1>"
-# @app.route("/<usr>",methods=["POST","GET"])
-# def user(usr):
-# 	print("ok",usr)
-# 	return  f"<h1>Welcome :{usr}</h1>"
 
 
 app.run(debug=True)
