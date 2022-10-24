@@ -6,7 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/style.css') }}"> 
 
-	<title>{{mode}}</title>
+	<title>Dashboard</title>
 <style>
 
 .col-4{
@@ -34,7 +34,9 @@ button{
 </head>
 <body>
 
+  <div style="color: white;padding:20px;position:absolute">{{mode}}</div>
   <nav class="navbar">
+    
     <div class="logout" style="text-align: end;padding: 20px;">
       <form action="/" method="get">
       <button type="submit" formaction="/">LOGOUT</button>
@@ -49,18 +51,11 @@ button{
           <button type="submit" formmethod="get" formaction="/add_student" >ADD STUDENT</button>
         </div>
         <div class="col-4">
-          <button type="submit" formmethod="get" formaction="/performance">PERFORMANCE ANALYSIS</button>
-  
+          <button type="submit" formmethod="get" formaction="/add_subject">ADD SUBJECTS</button>
         </div>
-    
         <div class="col-4">
           <button type="submit" formmethod="get" formaction="/add_marks">ADD/UPDATE Marks</button>
-        </div>
-  
-        <div class="col-4">
-          <button type="submit" formmethod="get" formaction="/addsubject">ADD SUBJECTS</button>
-          
-        </div>
+        </div> 
       </form>
       </div>
     <div class="column" style="flex: 50%;">

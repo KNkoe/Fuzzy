@@ -54,10 +54,10 @@ button{
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
   <strong>Warning!</strong> This ID is already taken , Enter a Unique ID.
 </div>
-{% elif msg=="phone" %}
+{% elif msg=="no-data" %}
     <div class="alert alert-danger alert-dismissible">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>Warning!</strong> Invalid Phone number.
+  <strong>Warning!</strong> Please enter a username.
 </div>
   {% elif msg=="success"%}
     <div class="alert alert-success">
@@ -69,18 +69,18 @@ button{
   <div class="col-6">
     <form action="#" method="post">
 <div class="form-group">
-  <label for="mod_id">User Name</label>
-  <input type="text" class="form-control" id="mod_id" name="mod_id" placeholder="Enter User Name">
-  <label for="Inputname">Name</label>
-  <input type="text" class="form-control" id="Inputname" name="Inputname" placeholder="Enter name">
+  <label for="id">User Name</label>
+  <input type="text" class="form-control" id="id" name="id" placeholder="Enter User Name">
+  <label for="name">Name</label>
+  <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
 </divx=request.form["Uname"]>
   <div class="form-group">
-  <label for="exampleInputPassword1">Password</label>
-  <input type="password" class="form-control" name="exampleInputPassword1" id="exampleInputPassword1" placeholder="Password">
+  <label for="password">Password</label>
+  <input type="password" class="form-control" name="password" id="password" placeholder="Password">
 </div>
 <div class="form-group">
-  <label for="exampleInputEmail1">Email address</label>
-  <input type="email" class="form-control" id="exampleInputEmail1" name="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+  <label for="email">Email address</label>
+  <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email">
 </div>
 <div class="form-group">
   <label for="phone">Phone number</label>

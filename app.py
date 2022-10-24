@@ -26,14 +26,16 @@ def home():
 def moderator():
 
 	if request.method=="POST":
-		idd=request.form['mod_id']
-		name=request.form['Inputname']
-		paswd=request.form['exampleInputPassword1']
-		email=request.form['exampleInputEmail1']
+		id=request.form['id']
+		name=request.form['name']
+		paswd=request.form['password']
+		email=request.form['email']
 		phone=request.form['phone']
 
+		if(len(id)==0):
+			return render_template('add_moderator.html',msg="no-data")
 		try:
-			addmoderator(idd,name,paswd,str(email),phone)
+			addmoderator(id,name,paswd,str(email),phone)
 			return render_template('add_moderator.html',msg="success")
 		except Exception as e:
 			print(e,"========================================")
@@ -51,18 +53,19 @@ def moderator():
 def add_student():
 	print(viewmoderator(),"\n\n\n\n\n\n\n")
 	if request.method=="POST":
-		usn=request.form['student_number']
-		name=request.form['inputname']
-		add=request.form['add']
-		mail=request.form['exampleInputEmail1']
-		phone=request.form['num']
-		add=request.form['add']
-		mail=request.form['exampleInputEmail1']
-		phone=request.form['num']
-		print(usn,name,add,mail,phone)
+		id=request.form['student_number']
+		name=request.form['name']
+		add=request.form['address']
+		email=request.form['email']
+		phone=request.form['phone']
+
+		print(id,name,add,email,phone)
+
+		if(len(id)==0):
+			return render_template('add_student.html',status="no-data")
 
 		try:
-			addstdrec(usn,name,phone,add,mail)
+			addstdrec(id,name,phone,add,email)
 			return render_template('add_student.html',status="ok")
 		except Exception as e:
 
@@ -76,7 +79,7 @@ def add_student():
 
 
 
-@app.route('/addsubject',methods=["POST","GET"])
+@app.route('/add_subject',methods=["POST","GET"])
 def add_subject():
 	lst=viewdatastud()
 	if request.method=="POST":
@@ -87,11 +90,11 @@ def add_subject():
 		back=request.form['pe']
 		try:
 			addsubject(usn,sub1,sub2,sub3,back)
-			return render_template('/addsubject.html',status="ok",data=lst,lenght=len(lst))
+			return render_template('/add_subject.html',status="ok",data=lst,lenght=len(lst))
 		except Exception as e:
-			return render_template('/addsubject.html',status="error",data=lst,lenght=len(lst))
+			return render_template('/add_subject.html',status="error",data=lst,lenght=len(lst))
 
-	return render_template('/addsubject.html',status="",data=lst,lenght=len(lst))
+	return render_template('/add_subject.html',status="",data=lst,lenght=len(lst))
 
 
 @app.route('/update',methods=['GET','POST'])
@@ -225,6 +228,6 @@ def view_fees():
 	lst=viewfeedetails()
 	return render_template('view_fees.html',data=lst,lenght=len(lst))
 
+if __name__ == '__main__':
+	app.run(debug=True)
 
-
-app.run(debug=True)
