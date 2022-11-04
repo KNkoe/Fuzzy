@@ -151,6 +151,7 @@ def performancedata():
      con.commit()
      con.close()
 
+performancedata()
 def addmark(usn,internal,external,attendance,final):
     con=sqlite3.connect("student.db")
     cur=con.cursor()

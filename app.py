@@ -156,7 +156,7 @@ def addmarks():
             "add_marks.html", status="error", data=lst, lenght=len(lst)
         )
     return render_template(
-            "add_marks.html", data=lst, lenght=len(lst)
+            "add_marks.html",status="success", data=lst, lenght=len(lst)
         )
     
 
