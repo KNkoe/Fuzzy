@@ -1,233 +1,214 @@
-from flask import  Flask ,render_template ,request ,redirect ,url_for,flash
+from flask import Flask, render_template, request, redirect, url_for, flash
 from backend import *
-app=Flask(__name__)
+from fuzzy import compute_fuzzy
+import math
+
+app = Flask(__name__)
 
 
-
-@app.route("/",methods=["POST","GET"])
+@app.route("/", methods=["POST", "GET"])
 def home():
-	if request.method=="POST":
-		x=request.form["username"]
-		y=request.form['password']
-		if x==y and x=="admin":
-			# Admin login
-			return render_template('admin.html')
-		else:
-			# Check if user exist
-			data=viewmoderator()
-			for lst in data:
-				if str(lst[0])==str(x) and str(lst[2])==str(y):
-					return render_template('moderator.html',mode=x)
+    if request.method == "POST":
+        x = request.form["username"]
+        y = request.form["password"]
+        if x == y and x == "admin":
+            # Admin login
+            return render_template("admin.html")
+        else:
+            # Check if user exist
+            data = viewmoderator()
+            for lst in data:
+                if str(lst[0]) == str(x) and str(lst[2]) == str(y):
+                    return render_template("moderator.html", mode=x)
 
-			return render_template('index.html',status="error")
-	return render_template('index.html',status='get')
+            return render_template("index.html", status="error")
+    return render_template("index.html", status="get")
 
-@app.route('/add_moderator',methods=["POST","GET"])
+
+@app.route("/admin", methods=["POST", "GET"])
+def admin():
+    return render_template("admin.html")
+
+
+@app.route("/add_moderator", methods=["POST", "GET"])
 def moderator():
 
-	if request.method=="POST":
-		id=request.form['id']
-		name=request.form['name']
-		paswd=request.form['password']
-		email=request.form['email']
-		phone=request.form['phone']
+    if request.method == "POST":
+        id = request.form["id"]
+        name = request.form["name"]
+        paswd = request.form["password"]
+        email = request.form["email"]
+        phone = request.form["phone"]
 
-		if(len(id)==0):
-			return render_template('add_moderator.html',msg="no-data")
-		try:
-			addmoderator(id,name,paswd,str(email),phone)
-			return render_template('add_moderator.html',msg="success")
-		except Exception as e:
-			print(e,"========================================")
+        if len(id) == 0:
+            return render_template("add_moderator.html", msg="no-data")
+        try:
+            addmoderator(id, name, paswd, str(email), phone)
+            return render_template("add_moderator.html", msg="success")
+        except Exception as e:
+            print(e)
 
-			
-			return render_template('add_moderator.html',msg="error")
+            return render_template("add_moderator.html", msg="error")
+        print(viewmoderator())
 
-		
-		print(viewmoderator())
+    return render_template("add_moderator.html", msg="GET")
 
 
-	return render_template('add_moderator.html',msg="GET")
-
-@app.route('/add_student',methods=["POST","GET"])
+@app.route("/add_student", methods=["POST", "GET"])
 def add_student():
-	print(viewmoderator(),"\n\n\n\n\n\n\n")
-	if request.method=="POST":
-		id=request.form['student_number']
-		name=request.form['name']
-		add=request.form['address']
-		email=request.form['email']
-		phone=request.form['phone']
+    print(viewmoderator(), "\n\n\n\n\n\n\n")
+    if request.method == "POST":
+        id = request.form["student_number"]
+        name = request.form["name"]
+        add = request.form["address"]
+        email = request.form["email"]
+        phone = request.form["phone"]
 
-		print(id,name,add,email,phone)
+        print(id, name, add, email, phone)
 
-		if(len(id)==0):
-			return render_template('add_student.html',status="no-data")
+        if len(id) == 0:
+            return render_template("add_student.html", status="no-data")
 
-		try:
-			addstdrec(id,name,phone,add,email)
-			return render_template('add_student.html',status="ok")
-		except Exception as e:
+        try:
+            addstdrec(id, name, phone, add, email)
+            return render_template("add_student.html", status="ok")
+        except Exception as e:
+            print(e)
+            return render_template("add_student.html", status="error")
 
-			print("check1**********************************************")
-
-			print("check1**********************************************",e)
-
-			return render_template('add_student.html',status="error")
-
-	return render_template('add_student.html',status="")
+    return render_template("add_student.html", status="")
 
 
-
-@app.route('/add_subject',methods=["POST","GET"])
+@app.route("/add_subject", methods=["POST", "GET"])
 def add_subject():
-	lst=viewdatastud()
-	if request.method=="POST":
-		usn=request.form['mod_del']
-		sub1=request.form['inputname']
-		sub2=request.form['num']
-		sub3=request.form['nu']
-		back=request.form['pe']
-		try:
-			addsubject(usn,sub1,sub2,sub3,back)
-			return render_template('/add_subject.html',status="ok",data=lst,lenght=len(lst))
-		except Exception as e:
-			return render_template('/add_subject.html',status="error",data=lst,lenght=len(lst))
+    lst = viewdatastud()
+    if request.method == "POST":
+        usn = request.form["mod_del"]
+        course_code = request.form["coursecode"]
+        course_name = request.form["coursename"]
+        try:
+            addsubject(usn, course_code, course_name)
+            return render_template(
+                "/add_subject.html", status="ok", data=lst, lenght=len(lst)
+            )
+        except Exception as e:
+            return render_template(
+                "/add_subject.html", status="error", data=lst, lenght=len(lst)
+            )
 
-	return render_template('/add_subject.html',status="",data=lst,lenght=len(lst))
+    return render_template("/add_subject.html", status="", data=lst, lenght=len(lst))
 
 
-@app.route('/update',methods=['GET','POST'])
+@app.route("/update", methods=["GET", "POST"])
 def update():
-	lst=viewdatastud()
-	try:
-		usn=request.form['usnno']
-		iat1=request.form['num1']
-		iat2=request.form['num2']
-		iat3=request.form['num3']
-		ex=int(request.form['ex'])
-		avg=(int(iat1)+int(iat2)+int(iat3))
-		# avg=0
-		print(ex,avg)
-		# avg//=3
-		total=0
-		print("testing2=========")
-	
-		updatemark(usn,int(iat1),int(iat2),int(iat3),int(ex),int(avg),int(total))
-		return render_template('add_marks.html',status='success',data=lst,lenght=len(lst))
-		
-	except Exception as e:
-		print("Exception:",e)
-	else:
-		return render_template('add_marks.html',status="error",data=lst,lenght=len(lst))
-		
+    lst = viewdatastud()
+    try:
+        usn = request.form["usnno"]
+        iat1 = request.form["num1"]
+        iat2 = request.form["num2"]
+        iat3 = request.form["num3"]
+        ex = int(request.form["ex"])
+        avg = int(iat1) + int(iat2) + int(iat3)
+        # avg=0
+        print(ex, avg)
+        # avg//=3
+        total = 0
+        print("testing2=========")
+
+        updatemark(usn, int(iat1), int(iat2), int(iat3), int(ex), int(avg), int(total))
+        return render_template(
+            "add_marks.html", status="success", data=lst, lenght=len(lst)
+        )
+
+    except Exception as e:
+        print("Exception:", e)
+    else:
+        return render_template(
+            "add_marks.html", status="error", data=lst, lenght=len(lst)
+        )
 
 
-
-@app.route('/add_marks',methods=["POST","GET"])
+@app.route("/add_marks", methods=["POST", "GET"])
 def addmarks():
-	lst=viewdatastud()
-	if request.method=="GET":
-		return render_template('add_marks.html',status="get",data=lst,lenght=len(lst))
+    lst = viewdatastud()
+    if request.method == "GET":
+        return render_template(
+            "add_marks.html", status="get", data=lst, lenght=len(lst)
+        )
+    try:
+        usn = request.form["usnno"]
+        internal = request.form["internal"]
+        exnternal = request.form["external"]
+        attendance = request.form["attendance"]
+        final =compute_fuzzy(int(internal), int(exnternal),int(attendance))
 
-	print("testing==========")
-	try:
-		usn=request.form['usnno']
-		iat1=request.form['num1']
-		iat2=request.form['num2']
-		iat3=request.form['num3']
-		ex=int(request.form['ex'])
-		avg=(int(iat1)+int(iat2)+int(iat3))
-		# avg=0
-		print(ex,avg)
-		# avg//=3
-		total=0
-		print("testing2=========")
-	
-		addmark(usn,int(iat1),int(iat2),int(iat3),int(ex),int(avg),int(total))
-		return render_template('add_marks.html',status='success',data=lst,lenght=len(lst))
-		
-	except Exception as e:
-		print("Exception:",e)
-	else:
-		return render_template('add_marks.html',status="error",data=lst,lenght=len(lst))
-		
+        print(final)
 
+        addmark(usn, int(internal), int(exnternal), int(attendance), final)
 
+        return render_template(
+            "add_marks.html", status="success", data=lst, lenght=len(lst)
+        )
 
-	# return render_template('add_marks.html',status="POST",data=lst,lenght=len(lst))
-	
+    except Exception as e:
+        print("Exception:", e)
+        return render_template(
+            "add_marks.html", status="error", data=lst, lenght=len(lst)
+        )
+    return render_template(
+            "add_marks.html", data=lst, lenght=len(lst)
+        )
+    
 
 
-@app.route('/moderator_section',methods=["POST","GET"])
+@app.route("/moderator_section", methods=["POST", "GET"])
 def modesection():
-	nam="Moderator"
-	if request.method=="POST":
-		nam=str(request.form['Uname'])
-	return render_template('moderator.html',mode=nam)
+    nam = "Moderator"
+    if request.method == "POST":
+        nam = str(request.form["Uname"])
+    return render_template("moderator.html", mode=nam)
 
 
-
-@app.route('/performance')
+@app.route("/performance")
 def performance():
-	lst=check_marks()
-	return render_template('performance.html',data=lst,lenght=len(lst))
+    lst = check_marks()
+    return render_template("performance.html", data=lst, lenght=len(lst))
 
-@app.route('/view_data')
+
+@app.route("/view_data")
 def view_stud():
-	return render_template('view.html')
+    return render_template("view.html")
 
 
-
-# @app.route('/temp')
-# def temp_std_data():
-# 	return redirect(url_for('view_std_data',flag="del"))
-
-
-
-@app.route('/view_std_data',methods=["POST","GET"])
+@app.route("/view_std_data", methods=["POST", "GET"])
 def view_std_data():
-	
-	if request.method=="POST":
-		print(request.form)
-		usn=request.form['usn_del']
-		deletestdrec(usn)
-	lst=viewdatastud()
-	return render_template('view_std_data.html',data=lst,lenght=len(lst))
 
-	print("**********************************")
-	
+    if request.method == "POST":
+        print(request.form)
+        usn = request.form["usn_del"]
+        deletestdrec(usn)
+    lst = viewdatastud()
+    return render_template("view_std_data.html", data=lst, lenght=len(lst))
 
-@app.route('/viewmoddata',methods=["POST","GET"])
+@app.route("/viewmoddata", methods=["POST", "GET"])
 def view_mod_data():
-	# print("check1==================================",viewmoderator())
 
-	if request.method=="POST":
-		mod=request.form['mod_del']
-		print(mod,"==============")
-		deleterecmoderator(mod)
+    if request.method == "POST":
+        mod = request.form["mod_del"]
+        deleterecmoderator(mod)
 
-		
-	lst=viewmoderator()
-	return render_template('view_moderator.html',data=lst,lenght=len(lst))
+    lst = viewmoderator()
+    return render_template("view_moderator.html", data=lst, lenght=len(lst))
 
-	
-
-@app.route('/view_sub_data')
+@app.route("/view_sub_data", methods=["POST","GET"])
 def view_subject():
-	lst=viewsubject()
-	return render_template('view_subject.html',data=lst,lenght=len(lst))
+    lst = viewsubject()
 
+    if request.method == "POST":
+        sub = request.form["deletesubject"]
+        deletesub(sub)
 
-@app.route('/score')
-def score():
-	return render_template('scores.html')
+    return render_template("view_subject.html", data=lst, lenght=len(lst))
 
-@app.route('/view_fees_details')
-def view_fees():
-	lst=viewfeedetails()
-	return render_template('view_fees.html',data=lst,lenght=len(lst))
-
-if __name__ == '__main__':
-	app.run(debug=True)
-
+if __name__ == "__main__":
+    app.run(debug=True)
