@@ -56,15 +56,12 @@ def moderator():
 
 @app.route("/add_student", methods=["POST", "GET"])
 def add_student():
-    print(viewmoderator(), "\n\n\n\n\n\n\n")
     if request.method == "POST":
         id = request.form["student_number"]
         name = request.form["name"]
         add = request.form["address"]
         email = request.form["email"]
         phone = request.form["phone"]
-
-        print(id, name, add, email, phone)
 
         if len(id) == 0:
             return render_template("add_student.html", status="no-data")
@@ -76,31 +73,7 @@ def add_student():
             print(e)
             return render_template("add_student.html", status="error")
 
-    return render_template("add_student.html", status="")
-
-@app.route("/update", methods=["GET", "POST"])
-def update():
-    lst = viewdatastud()
-    try:
-        usn = request.form["usnno"]
-        internal = request.form["internal"]
-        external = request.form["external"]
-        attendance = request.form["attendance"]
-        
-        final = compute_fuzzy(int(internal) , int(external) , int(attendance))
-        print(final)
-
-        updatemark(usn, int(internal), int(external), int(attendance), final)
-        return render_template(
-            "add_marks.html", status="success", data=lst, lenght=len(lst)
-        )
-
-    except Exception as e:
-        print("Exception:", e)
-        return render_template(
-            "add_marks.html", status="error", data=lst, lenght=len(lst)
-        )
-
+    return render_template("add_student.html", status="success")
 
 @app.route("/add_marks", methods=["POST", "GET"])
 def addmarks():
@@ -118,10 +91,23 @@ def addmarks():
 
         print(final)
 
-        addmark(usn, int(internal), int(external), int(attendance), final)
+        remark = ""
+        
+        if(float(final) < 50):
+            remark = "Poor"
+        elif(float(final) < 60):
+            remark ="Average"
+        elif(float(final) < 70):
+            remark = "Good"
+        elif(float(final) < 80):
+            remark = "Very good"
+        else:
+            remark = "Exellent"
+
+        addmark(usn, int(internal), int(external), int(attendance), final, remark)
 
         return render_template(
-            "add_marks.html", status="success", data=lst, lenght=len(lst)
+            "add_marks.html", status="added", data=lst, lenght=len(lst)
         )
 
     except Exception as e:
@@ -129,9 +115,44 @@ def addmarks():
         return render_template(
             "add_marks.html", status="error", data=lst, lenght=len(lst)
         )
-    return render_template(
-            "add_marks.html",status="success", data=lst, lenght=len(lst)
+
+@app.route("/update", methods=["GET", "POST"])
+def update():
+    lst = viewdatastud()
+    try:
+        usn = request.form["usnno"]
+        internal = request.form["internal"]
+        external = request.form["external"]
+        attendance = request.form["attendance"]
+        
+        final = compute_fuzzy(int(internal) , int(external) , int(attendance))
+        print(final)
+
+        remark = ""
+
+        if(float(final) < 50):
+            remark = "Poor"
+        elif(float(final) < 60):
+            remark ="Average"
+        elif(float(final) < 70):
+            remark = "Good"
+        elif(float(final) < 80):
+            remark = "Very good"
+        else:
+            remark = "Exellent"
+
+        updatemark(usn, int(internal), int(external), int(attendance), final, remark)
+        return render_template(
+            "add_marks.html", status="updated", data=lst, lenght=len(lst)
         )
+
+    except Exception as e:
+        print("Exception:", e)
+        return render_template(
+            "add_marks.html", status="error", data=lst, lenght=len(lst)
+        )
+
+
 
 @app.route("/moderator_section", methods=["POST", "GET"])
 def modesection():

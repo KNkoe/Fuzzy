@@ -40,11 +40,15 @@ button{
     {% if status=="error" %}
     <div class="alert alert-danger alert-dismissible">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>Warning!</strong> This record already exists.
+  <strong>Warning!</strong>   An error occured, please try again.
 </div>
-  {% elif status=="ok"%}
+  {% elif status=="added"%}
     <div class="alert alert-success">
-<strong>Success!</strong> Student has been added.
+<strong>Success!</strong> Marks have been added.
+</div>
+{% elif status=="updated"%}
+    <div class="alert alert-success">
+<strong>Success!</strong> Marks have been updated.
 </div>
   {% endif %}
 

@@ -99,15 +99,16 @@ def performancedata():
      external INTEGER,
      attendance INTEGER,
      final TEXT,
+     remark TEXT,
      foreign key (usn) references student(usn) ON DELETE CASCADE)""")
      con.commit()
      con.close()
 
 performancedata()
-def addmark(usn,internal,external,attendance,final):
+def addmark(usn,internal,external,attendance,final, remark):
     con=sqlite3.connect("student.db")
     cur=con.cursor()
-    cur.execute("""INSERT INTO performance VALUES(:usn,:internal,:external,:attendance,:final)""",{'usn':usn,'internal':internal,'external':external,'attendance':attendance,'final':final})
+    cur.execute("""INSERT INTO performance VALUES(:usn,:internal,:external,:attendance,:final,:remark)""",{'usn':usn,'internal':internal,'external':external,'attendance':attendance,'final':final,'remark':remark})
     con.commit()
     con.close()
 
@@ -119,12 +120,12 @@ def check_marks():
     con.close()
     return rows
 
-def updatemark(usn,internal,external,attendance,final):
+def updatemark(usn,internal,external,attendance,final,remark):
     con=sqlite3.connect("student.db")
     cur=con.cursor()
     cur.execute("DELETE FROM performance WHERE usn=:usn",{'usn':usn})
     con.commit()
     con.close()
-    addmark(usn,internal,external,attendance,final)
+    addmark(usn,internal,external,attendance,final,remark)
 
 
