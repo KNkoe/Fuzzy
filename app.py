@@ -132,8 +132,6 @@ def addmarks():
     return render_template(
             "add_marks.html",status="success", data=lst, lenght=len(lst)
         )
-    
-
 
 @app.route("/moderator_section", methods=["POST", "GET"])
 def modesection():
