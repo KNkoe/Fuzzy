@@ -90,54 +90,6 @@ def updaterecmoderator(idm,namem,password,emailm,contactno):
      con.commit()
      con.close()
 
-def subjectdata():
-     con=sqlite3.connect("student.db")
-     cur=con.cursor()
-     con.execute("""PRAGMA foreign_keys = ON""")
-     cur.execute("""CREATE TABLE IF NOT EXISTS subject(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,     
-    usn TEXT,
-     course_code TEXT,
-     course_name TEXT,
-     foreign key (usn) references student(usn) ON DELETE CASCADE)""")
-     con.commit()
-     con.close()
-
-subjectdata()
-def addsubject(usn,course_code,course_name):
-     con=sqlite3.connect("student.db")
-     cur=con.cursor()
-     cur.execute("""INSERT INTO subject VALUES (:usn,:course_code,:course_name)""",{'usn':usn,'course_code':course_code,'course_name':course_name})
-     con.commit()
-     con.close()
-
-def viewsubject():
-     con=sqlite3.connect("student.db")
-     cur=con.cursor()
-     cur.execute("SELECT * FROM subject")
-     rows=cur.fetchall()
-     con.close()
-     return rows
-
-      
-
-def deletesub(usn):
-     con=sqlite3.connect("student.db")
-     cur=con.cursor()
-     cur.execute("DELETE FROM subject WHERE usn=:usn",{'usn':usn})
-     con.commit()
-     con.close()
-
-
-def updaterecsubject(usn,sub1,sub2,sub3,backlogs):
-     con=sqlite3.connect("student.db")
-     cur=con.cursor()
-     cur.execute("UPDATE subject SET sub1=:sub1,sub2=:sub2,sub3=:sub3,backlogs=:backlogs WHERE usn=:usn",{'sub1':sub1,'sub2':sub2,'sub3':sub3,'backlogs':backlogs,'usn':usn})
-     con.commit()
-     con.close()
-
-
-
 def performancedata():
      con=sqlite3.connect("student.db")
      cur=con.cursor()

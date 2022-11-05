@@ -78,51 +78,25 @@ def add_student():
 
     return render_template("add_student.html", status="")
 
-
-@app.route("/add_subject", methods=["POST", "GET"])
-def add_subject():
-    lst = viewdatastud()
-    if request.method == "POST":
-        usn = request.form["mod_del"]
-        course_code = request.form["coursecode"]
-        course_name = request.form["coursename"]
-        try:
-            addsubject(usn, course_code, course_name)
-            return render_template(
-                "/add_subject.html", status="ok", data=lst, lenght=len(lst)
-            )
-        except Exception as e:
-            return render_template(
-                "/add_subject.html", status="error", data=lst, lenght=len(lst)
-            )
-
-    return render_template("/add_subject.html", status="", data=lst, lenght=len(lst))
-
-
 @app.route("/update", methods=["GET", "POST"])
 def update():
     lst = viewdatastud()
     try:
         usn = request.form["usnno"]
-        iat1 = request.form["num1"]
-        iat2 = request.form["num2"]
-        iat3 = request.form["num3"]
-        ex = int(request.form["ex"])
-        avg = int(iat1) + int(iat2) + int(iat3)
-        # avg=0
-        print(ex, avg)
-        # avg//=3
-        total = 0
-        print("testing2=========")
+        internal = request.form["internal"]
+        external = request.form["external"]
+        attendance = request.form["attendance"]
+        
+        final = compute_fuzzy(int(internal) , int(external) , int(attendance))
+        print(final)
 
-        updatemark(usn, int(iat1), int(iat2), int(iat3), int(ex), int(avg), int(total))
+        updatemark(usn, int(internal), int(external), int(attendance), final)
         return render_template(
             "add_marks.html", status="success", data=lst, lenght=len(lst)
         )
 
     except Exception as e:
         print("Exception:", e)
-    else:
         return render_template(
             "add_marks.html", status="error", data=lst, lenght=len(lst)
         )
@@ -138,13 +112,13 @@ def addmarks():
     try:
         usn = request.form["usnno"]
         internal = request.form["internal"]
-        exnternal = request.form["external"]
+        external = request.form["external"]
         attendance = request.form["attendance"]
-        final =compute_fuzzy(int(internal), int(exnternal),int(attendance))
+        final =compute_fuzzy(int(internal), int(external),int(attendance))
 
         print(final)
 
-        addmark(usn, int(internal), int(exnternal), int(attendance), final)
+        addmark(usn, int(internal), int(external), int(attendance), final)
 
         return render_template(
             "add_marks.html", status="success", data=lst, lenght=len(lst)

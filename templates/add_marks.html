@@ -4,8 +4,6 @@
 	<meta charset="utf-8">
 
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<link rel="stylesheet" type="text/css" href="styles.css">
-
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
 	<title>Add/Update marks</title>
@@ -42,7 +40,7 @@ button{
     {% if status=="error" %}
     <div class="alert alert-danger alert-dismissible">
   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-  <strong>Warning!</strong> This student already exist.
+  <strong>Warning!</strong> This record already exists.
 </div>
   {% elif status=="ok"%}
     <div class="alert alert-success">
@@ -71,7 +69,7 @@ button{
   <input type="number" min="0" class="form-control" name="external" placeholder="Enter External Marks%">
   
   <label for="attendance">Attendance</label>
-  <input type="number" min="0" class="form-control" name="attendance" placeholder="Enter Attendance% ( Calculated as (classes-attended/total-classes) x 100)">
+  <input type="number" min="0" class="form-control" name="attendance" placeholder="Enter Attendance% ( Calculated as (classes_attended/total_classes) x 100)">
   
 </div>
 <form>
