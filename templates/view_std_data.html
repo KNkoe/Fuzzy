@@ -24,8 +24,8 @@
 
 
 <form method="post" action="/view_std_data">
-  <select name="usn_del" class="custom-select custom-select-lg mb-3" style="width: 25%;"  >
-  <option selected>Select student to Delete</option>
+  <select name="usn_del" class="custom-select custom-select-lg mb-3" style="width: 25%;" required>
+  <option disabled selected>Select student to Delete</option>
   {% for j in range(lenght) %}
     <option>{{data[j][0]}}</option>
   {% endfor %}

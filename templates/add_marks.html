@@ -56,7 +56,7 @@ button{
 
 <form action="/add_marks" method="POST">
 <select name="usnno" class="custom-select custom-select-lg mb-3" style="width: 25%;"  >
-<option selected>Select Student</option>
+<option disabled selected>Select Student</option>
 {% for j in range(lenght) %}
   <option>{{data[j][0]}}</option>
 {% endfor %}

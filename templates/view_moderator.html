@@ -18,7 +18,7 @@
 
 <form method="post" action="/viewmoddata">
   <select name="mod_del" class="custom-select custom-select-lg mb-3" style="width: 25%;"  >
-  <option selected>Select Moderator to Delete</option>
+  <option disabled selected>Select Moderator to Delete</option>
   {% for j in range(lenght) %}
     <option>{{data[j][0]}}</option>
   {% endfor %}

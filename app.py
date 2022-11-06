@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from backend import *
 from fuzzy import compute_fuzzy
 import math
+import webbrowser
 
 app = Flask(__name__)
 
@@ -204,4 +205,7 @@ def view_subject():
     return render_template("view_subject.html", data=lst, lenght=len(lst))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    print("Opening web browser")
+    webbrowser.open("http://127.0.0.1:5000")
+    app.run(debug=True,host="0.0.0.0")
+    
