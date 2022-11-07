@@ -14,8 +14,8 @@ The system was build using **Flask**
 > run ./start.sh
 
 
-*Username: *admin*
-*Password: *admin*
+Username: *admin* <br>
+Password: *admin*
 
 Use the above credentials to add moderators to the system then login using their credentials
 
