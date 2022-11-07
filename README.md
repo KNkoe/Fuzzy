@@ -7,13 +7,14 @@ The main purposes of assessment and evaluation are to evaluate the academic perf
 The system was build using **Flask**
 
 ### On windows
-> run start.bat ( This script installs the necessary python packages and launches the browser on address http://127.0.0.1:5000
+> run start.bat 
+>>*This script installs the necessary python packages and launches the browser on address http://127.0.0.1:5000*
 
 ### On linux on mac
 > run ./start.sh
 
-Username: admin
-Password: admin
+Username: *admin*
+Password: *admin*
 
 Use the above credentials to add moderators to the system then login using their credentials
 
